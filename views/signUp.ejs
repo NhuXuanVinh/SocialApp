@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Sign Up!
+        </title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body>
+<div class="login_body">
+    <div class="wrapper">
+        <h1>Sign Up</h1>
+        <form action="/signup" method="post">
+            <div class="input_box">
+                <input type="text" name="username" id="username" placeholder="Username"  autocomplete="false"  required>
+                </div>
+                <div class="input_box">
+                    <input type='password' name='password' id='password' placeholder="Password"  autocomplete='false' required />
+                </div>
+                <div class="input_box">
+                    <input type="text" name="email" id="email" placeholder="Email"  autocomplete="false"  required>
+                </div>
+                <div class="input_box">
+                    <input type="text" name="phone_number" id="phone_number" placeholder="Phone number"  autocomplete="false"  required>
+                </div>
+            <button type="submit" class="btn">Sign Up</button>
+        </form>
+            <div class="signUp_link">
+            <p>
+            Already have an account?
+            <a href="/login">Sign In</a>
+            </p>
+        </div>
+        </div>
+    </div>
+    </div>
+    </form>
+</body>
+</html>

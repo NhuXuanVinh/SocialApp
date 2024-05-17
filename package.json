@@ -1,0 +1,30 @@
+{
+  "name": "socialapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "cookie-session": "^2.1.0",
+    "cron": "^3.1.7",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "ngrok": "^5.0.0-beta.2",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
+    "pg": "^8.11.5",
+    "twitter": "^1.7.1",
+    "twitter-api-client": "^1.6.1",
+    "twitter-api-v2": "^1.16.4"
+  }
+}

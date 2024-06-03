@@ -10,7 +10,7 @@ dotenv.config();
 passport.use(new TwitterStrategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: process.env.CALLBACK_URL,
+  callbackURL: process.env.TWITTER_CALLBACK_URL,
   includeEmail: true,
   passReqToCallback: true  // Ensure this is set to true
 },
@@ -101,20 +101,12 @@ const postTweet = async (userId, tweetText) => {
   }
 };
 
-passport.serializeUser((user, done) => {
-  done(null, user.twitter_id);
-});
-
-passport.deserializeUser(async (twitterId, done) => {
-  const user = await twitterModel.findUserByTwitterId(twitterId);
-  done(null, user);
-});
 
 const twitterAuth = passport.authenticate('twitter');
 
 const twitterCallback = passport.authenticate('twitter', {
   successRedirect: '/index',
-  failureRedirect: '/login',
+  failureRedirect: '/index',
 });
 
 module.exports = {

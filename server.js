@@ -5,6 +5,8 @@ const passport = require('passport');
 // const ngrok = require('ngrok');
 const authRoutes = require('./routes/authRoutes'); // Import the authentication routes
 const twitterRoutes = require('./routes/twitterRoutes'); // Import the authentication routes
+const linkedinRoutes = require('./routes/linkedinRoutes')
+const youtubeRoutes = require('./routes/youtubeRoutes')
 require('./config/passport_setup')(passport);
 const flash = require('connect-flash'); 
 dotenv.config();
@@ -32,13 +34,15 @@ app.use(express.static('public'));
 // Use the authentication routes from the routes module
 app.use(authRoutes);
 app.use(twitterRoutes);
-
+app.use(linkedinRoutes);
+app.use(youtubeRoutes);
 // Optionally, define a root route or any additional routes
-app.get('/index', (req, res) => {
+app.get('/dashboard', (req, res) => {
     if (req.isAuthenticated()) {
-      res.render('index', {
-        username: req.user.username,
-        id: req.user.userid,
+      res.render('dashboard', {
+        linkedinUsername: "Nhu Xuan Vinh",
+        twitterUsername: "NXVINHPRO2",
+        youtubeChannel: "Vinh Nhu"
     });
     } else {
       res.redirect('/login');

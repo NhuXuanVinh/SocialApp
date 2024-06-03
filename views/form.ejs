@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post to LinkedIn</title>
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Post to LinkedIn</h2>
+        <form action="/post-to-linkedin" method="post" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="content">Content:</label>
+                <textarea id="content" name="content" rows="4" cols="50" placeholder="What's on your mind?" oninput="updateCharacterCount()"></textarea>
+                <small id="charCount" class="char-count">0/1300 characters</small>
+            </div>
+            <button type="submit" class="btn">Post</button>
+        </form>
+    </div>
+
+    <script>
+        function updateCharacterCount() {
+            const content = document.getElementById('content');
+            const charCount = document.getElementById('charCount');
+            const maxChars = 1300;
+            charCount.textContent = `${content.value.length}/${maxChars} characters`;
+            if (content.value.length > maxChars) {
+                charCount.classList.add('text-danger');
+                charCount.classList.remove('text-muted');
+            } else {
+                charCount.classList.remove('text-danger');
+                charCount.classList.add('text-muted');
+            }
+        }
+
+        function validateForm() {
+            const content = document.getElementById('content').value;
+            if (content.length === 0) {
+                alert('Content cannot be empty.');
+                return false;
+            }
+            if (content.length > 1300) {
+                alert('Content exceeds the maximum length of 1300 characters.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

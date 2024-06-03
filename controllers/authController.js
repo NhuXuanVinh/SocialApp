@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
 
 const loginUser = (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: '/index',
+        successRedirect: '/dashboard',
         failureRedirect: '/login',
         failureFlash: true
     })(req, res, next);

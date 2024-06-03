@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Social Media Dashboard</h1>
+        </header>
+        <section class="accounts">
+            <h2>Connected Accounts</h2>
+            <ul class="account-list">
+                <li>
+                    <div class="account linkedin">
+                        <img src="/images/linkedin.png" alt="LinkedIn">
+                        <% if (linkedinUsername) { %>
+                            <span>Connected as <%= linkedinUsername %></span>
+                            <a href="/post-to-linkedin" class="reconnect">Post</a>
+                        <% } %>
+                    </div>
+                </li>
+                <li>
+                    <div class="account twitter">
+                        <img src="/images/twitter.png" alt="Twitter">
+                        <% if (twitterUsername) { %>
+                            <span>Connected as <%= twitterUsername %></span>
+                            <a href="/tweet" class="reconnect">Post</a>
+                        <% } %>
+                    </div>
+                </li>
+                <li>
+                    <div class="account youtube">
+                        <img src="/images/youtube.png" alt="YouTube">
+                        <% if (youtubeChannel) { %>
+                            <span>Connected as <%= youtubeChannel %></span>
+                            <a href="/youtube_upload" class="reconnect">Post</a>
+                        <% }  %>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="post">
+            <h2>Connect to your social accounts</h2>
+            <ul class="account-list">
+                <li>
+                    <div class="account linkedin">
+                        <img src="/images/linkedin.png" alt="LinkedIn">
+                        <% if (linkedinUsername) { %>
+                            <span>Connected to LinkedIn</span>
+                            <a href="/auth/linkedin" class="reconnect">Connect</a>
+                        <% } %>
+                    </div>
+                </li>
+                <li>
+                    <div class="account twitter">
+                        <img src="/images/twitter.png" alt="Twitter">
+                        <% if (twitterUsername) { %>
+                            <span>Connected to Twitter </span>
+                            <a href="/auth/twitter" class="reconnect">Connect</a>
+                        <% } %>
+                    </div>
+                </li>
+                <li>
+                    <div class="account youtube">
+                        <img src="/images/youtube.png" alt="YouTube">
+                        <% if (youtubeChannel) { %>
+                            <span>Connected to Youtube</span>
+                            <a href="/auth/google" class="reconnect">Connect</a>
+                        <% }  %>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

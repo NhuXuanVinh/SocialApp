@@ -1,7 +1,7 @@
 // In a file like passport-setup.js
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const userModel = require('../models/userModel');
+const userModel = require('../src/models/userModel');
 
 module.exports = function(passport) {
     passport.use(new LocalStrategy({ usernameField: 'username' }, async (username, password, done) => {

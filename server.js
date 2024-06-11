@@ -3,10 +3,10 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
 // const ngrok = require('ngrok');
-const authRoutes = require('./routes/authRoutes'); // Import the authentication routes
-const twitterRoutes = require('./routes/twitterRoutes'); // Import the authentication routes
-const linkedinRoutes = require('./routes/linkedinRoutes')
-const youtubeRoutes = require('./routes/youtubeRoutes')
+const authRoutes = require('./src/routes/authRoutes'); // Import the authentication routes
+const twitterRoutes = require('./src/routes/twitterRoutes'); // Import the authentication routes
+const linkedinRoutes = require('./src/routes/linkedinRoutes')
+const youtubeRoutes = require('./src/routes/youtubeRoutes')
 require('./config/passport_setup')(passport);
 const flash = require('connect-flash'); 
 dotenv.config();

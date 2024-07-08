@@ -5,6 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Media Dashboard</title>
     <link rel="stylesheet" href="/css/dashboard.css">
+    <script>
+        // Function to show alert
+        function showAlert(message, type) {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert alert-${type}`;
+            alertBox.textContent = message;
+            document.body.prepend(alertBox);
+
+            // Automatically close the alert after 3 seconds
+            setTimeout(() => {
+                alertBox.remove();
+            }, 10000);
+        }
+
+        // Function to show alerts from server-side flash messages
+        function showFlashMessages() {
+            const successMessage = "<%= messages.success && messages.success.length > 0 ? messages.success[0] : '' %>";
+            const errorMessage = "<%= messages.error && messages.error.length > 0 ? messages.error[0] : '' %>";
+
+            if (successMessage) {
+                showAlert(successMessage, 'success');
+            }
+
+            if (errorMessage) {
+                showAlert(errorMessage, 'danger');
+            }
+        }
+
+        // Execute the function when the page loads
+        window.onload = showFlashMessages;
+    </script>
 </head>
 <body>
     <div class="container">
@@ -16,29 +47,28 @@
             <ul class="account-list">
                 <li>
                     <div class="account linkedin">
-                        <img src="/images/linkedin.png" alt="LinkedIn">
-                        <% if (linkedinUsername) { %>
-                            <span>Connected as <%= linkedinUsername %></span>
-                            <a href="/post-to-linkedin" class="reconnect">Post</a>
+                        <% if (linkedinAccounts && linkedinAccounts.length > 0) { %>
+                            <% linkedinAccounts.forEach(account => { %>
+                                <div class="account-item">
+                                    <img src="/images/linkedin.png" alt="LinkedIn">
+                                    <span>Connected as <%= account.username %></span>
+                                    <a href="/post-to-linkedin/<%= account.linkedin_id %>" class="reconnect">Post</a>
+                                </div>
+                            <% }) %>
                         <% } %>
                     </div>
                 </li>
                 <li>
                     <div class="account twitter">
-                        <img src="/images/twitter.png" alt="Twitter">
-                        <% if (twitterUsername) { %>
-                            <span>Connected as <%= twitterUsername %></span>
-                            <a href="/tweet" class="reconnect">Post</a>
+                        <% if (twitterAccounts && twitterAccounts.length > 0) { %>
+                            <% twitterAccounts.forEach(account => { %>
+                                <div class="account-item">
+                                    <img src="/images/twitter.png" alt="Twitter">
+                                    <span>Connected as <%= account.username %></span>
+                                    <a href="/tweet/<%= account.twitter_id %>" class="reconnect">Post</a>
+                                </div>
+                            <% }) %>
                         <% } %>
-                    </div>
-                </li>
-                <li>
-                    <div class="account youtube">
-                        <img src="/images/youtube.png" alt="YouTube">
-                        <% if (youtubeChannel) { %>
-                            <span>Connected as <%= youtubeChannel %></span>
-                            <a href="/youtube_upload" class="reconnect">Post</a>
-                        <% }  %>
                     </div>
                 </li>
             </ul>
@@ -49,29 +79,20 @@
             <ul class="account-list">
                 <li>
                     <div class="account linkedin">
-                        <img src="/images/linkedin.png" alt="LinkedIn">
-                        <% if (linkedinUsername) { %>
-                            <span>Connected to LinkedIn</span>
-                            <a href="/auth/linkedin" class="reconnect">Connect</a>
-                        <% } %>
+                        <div class="account-item">
+                            <img src="/images/linkedin.png" alt="LinkedIn">
+                            <span>Connect to Linkedin</span>
+                                <a href="/auth/linkedin" class="connect">Connect</a>
+                        </div>
                     </div>
                 </li>
                 <li>
                     <div class="account twitter">
-                        <img src="/images/twitter.png" alt="Twitter">
-                        <% if (twitterUsername) { %>
-                            <span>Connected to Twitter </span>
-                            <a href="/auth/twitter" class="reconnect">Connect</a>
-                        <% } %>
-                    </div>
-                </li>
-                <li>
-                    <div class="account youtube">
-                        <img src="/images/youtube.png" alt="YouTube">
-                        <% if (youtubeChannel) { %>
-                            <span>Connected to Youtube</span>
-                            <a href="/auth/google" class="reconnect">Connect</a>
-                        <% }  %>
+                        <div class="account-item">
+                            <img src="/images/twitter.png" alt="Twitter">
+                            <span>Connect to Twitter</span>
+                            <a href="/auth/twitter" class="connect">Connect</a>
+                        </div>
                     </div>
                 </li>
             </ul>

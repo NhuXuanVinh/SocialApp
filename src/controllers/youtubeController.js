@@ -18,7 +18,7 @@ let tokens; // Variable to store tokens
 const upload = multer({ dest: 'uploads/' });
 
 const renderForm = (req, res) => {
-  res.render('youtube_form');
+  res.render('youtubePostForm');
 };
 
 const authenticate = (req, res) => {

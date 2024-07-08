@@ -2,11 +2,13 @@ const express = require('express');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
+const path = require('path')
 // const ngrok = require('ngrok');
 const authRoutes = require('./src/routes/authRoutes'); // Import the authentication routes
 const twitterRoutes = require('./src/routes/twitterRoutes'); // Import the authentication routes
 const linkedinRoutes = require('./src/routes/linkedinRoutes')
 const youtubeRoutes = require('./src/routes/youtubeRoutes')
+const dashboardRoutes = require('./src/routes/dashboardRoutes')
 require('./config/passport_setup')(passport);
 const flash = require('connect-flash'); 
 dotenv.config();
@@ -29,6 +31,7 @@ app.use(express.urlencoded({ extended: true })); // To handle URL-encoded data
 app.use(express.json()); // To handle JSON data
 // Serve static files from the 'public' directory
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static('public'));
 
 // Use the authentication routes from the routes module
@@ -36,18 +39,19 @@ app.use(authRoutes);
 app.use(twitterRoutes);
 app.use(linkedinRoutes);
 app.use(youtubeRoutes);
+app.use(dashboardRoutes);
 // Optionally, define a root route or any additional routes
-app.get('/dashboard', (req, res) => {
-    if (req.isAuthenticated()) {
-      res.render('dashboard', {
-        linkedinUsername: "Nhu Xuan Vinh",
-        twitterUsername: "NXVINHPRO2",
-        youtubeChannel: "Vinh Nhu"
-    });
-    } else {
-      res.redirect('/login');
-    }
-  });
+// app.get('/dashboard', (req, res) => {
+//     if (req.isAuthenticated()) {
+//       res.render('dashboard', {
+//         linkedinUsername: "Nhu Xuan Vinh",
+//         twitterUsername: "NXVINHPRO2",
+//         youtubeChannel: "Vinh Nhu"
+//     });
+//     } else {
+//       res.redirect('/login');
+//     }
+//   });
 
 // Start the server
 app.listen(PORT, () => {

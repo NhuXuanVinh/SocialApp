@@ -11,37 +11,43 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 });
 
-const findUserByLinkedinId = async (linkedin_id) => {
+const findLinkedinAccountByLinkedinId = async (linkedin_id) => {
     const result = await pool.query('SELECT * FROM linkedin_accounts WHERE linkedin_id = $1', [linkedin_id]);
     return result.rows[0];
   };
-  const findLinkedinAccountByUserId = async (userId) => {
+  const findLinkedinAccountsByUserId = async (userId) => {
     const result = await pool.query('SELECT * FROM linkedin_accounts WHERE user_id = $1', [userId]);
-    console.log(result.rows[0]);
-    return result.rows[0];
+    return result.rows;
   };
   
   const upsertUserWithLinkedin = async (userId, linkedin_id, username, email, token) => {
-    const existingUser = await findUserByLinkedinId(linkedin_id);
-    if (existingUser) {
-      // Update user if any details have changed, including token and tokenSecret
-      const result = await pool.query(
-        'UPDATE linkedin_accounts SET username = $1, email = $2, token = $3, user_id = $4 WHERE linkedin_id = $5 RETURNING *',
-        [username, email, token, userId, linkedin_id]
-      );
-      return result.rows[0];
-    } else {
       // Insert new Linkedin user linked to the main user account
       const result = await pool.query(
         'INSERT INTO linkedin_accounts (linkedin_id, user_id, username, email, token) VALUES ($1, $2, $3, $4, $5) RETURNING *',
         [linkedin_id, userId, username, email, token]
       );
       return result.rows[0];
-    }
   };
   
+  const createScheduledPost = async (linkedin_id, content, scheduledTime, status) => {
+    const result = await pool.query(
+        'INSERT INTO linkedin_posts (user_id, content, scheduled_time, status) VALUES ($1, $2, $3) RETURNING *',
+        [linkedin_id, content, scheduledTime, status]
+    );
+    return result.rows[0];
+};
+
+const getPendingScheduledPosts = async () => {
+    const result = await pool.query(
+        'SELECT * FROM linkedin_posts WHERE scheduled_time > NOW() ORDER BY scheduled_time ASC'
+    );
+    return result.rows;
+};
+
   module.exports = {
-    findUserByLinkedinId,
+    findLinkedinAccountByLinkedinId,
     upsertUserWithLinkedin,
-    findLinkedinAccountByUserId
+    findLinkedinAccountsByUserId,
+    createScheduledPost,
+    getPendingScheduledPosts
   };

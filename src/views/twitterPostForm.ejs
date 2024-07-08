@@ -96,7 +96,7 @@
 <body>
     <div class="container">
         <h1>Post a Tweet</h1>
-        <form action="/tweet" method="post" id="tweetForm">
+        <form action="/tweet/<%= twitter_id %>" method="post" id="tweetForm">
             <div class="form-group">
                 <label for="tweetText">What's happening <%= twitter_username %> ?</label>
                 <textarea id="tweetText" name="tweetText" rows="4" cols="50" placeholder="Write your tweet here..." required></textarea>

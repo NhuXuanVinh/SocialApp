@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 // const Twitter = require('twitter');
 const { TwitterApi } = require('twitter-api-v2');
 const userModel = require('../models/userModel'); // Assuming this model has the necessary methods
+const { redirect } = require('express/lib/response');
 dotenv.config();
 
 passport.use(new TwitterStrategy({
@@ -55,34 +56,19 @@ const createTwitterClient = (token, tokenSecret) => {
   });
 };
 
-// const postTweet = async (userId, tweetText) => {
-//   try {
-//     // Retrieve the user's Twitter tokens from your database
-//     const twitterAccount = await twitterModel.findTwitterAccountByUserId(userId);
-//     if (!twitterAccount) {
-//       throw new Error('Twitter account not linked');
-//     }
 
-//     // Create a Twitter client using the user's tokens
-//     const client = createTwitterClient(twitterAccount.token, twitterAccount.token_secret);
-
-//     // Post the tweet
-//     const tweet = await client.post('statuses/update', { status: tweetText });
-//     return tweet;
-//   } catch (error) {
-//     console.error('Error posting tweet', error);
-//     throw error;
-//   }
-// };
-
-const postTweet = async (userId, tweetText) => {
+const postTweet = async (req, res) => {
   try {
     // Retrieve the user's Twitter tokens from your database
-    const twitterAccount = await twitterModel.findTwitterAccountByUserId(userId);
+    // const userId = req.user.userid
+    const twitterId = req.params.twitterId;
+    const tweetText = req.body.tweetText;
+    const twitterAccount = await twitterModel.findTwitterAccountByTwitterId(twitterId);
 
     if (!twitterAccount) {
       console.error('Twitter account not linked for user:', userId);
-      throw new Error('Twitter account not linked');
+      req.flash('error', 'Twitter account not linked.');
+      return res.redirect('/dashboard');
     }
     console.log('Retrieved tokens:', {
       token: twitterAccount.token,
@@ -94,10 +80,18 @@ const postTweet = async (userId, tweetText) => {
     // Post the tweet
     const { data: tweet } = await client.v2.tweet(tweetText);
     console.log('Tweet posted successfully:', tweet);
-    return tweet;
+
+    // Save post to db
+    const postLink = `https://twitter.com/${twitterAccount.username}/status/${tweet.id}`;
+    await twitterModel.createTwitterPost(twitterId, tweetText, null, postLink, "posted");
+
+    // Redirect to dashboard
+    req.flash('success', 'Tweet posted successfully!');
+    res.redirect('/dashboard')
   } catch (error) {
-    console.error('Error posting tweet for user:', userId, 'with message:', tweetText, 'Error:', error);
-    throw error;
+    console.error('Error posting tweet:', error);
+    req.flash('error', 'There was an error posting the tweet.');
+    res.redirect('/dashboard');
   }
 };
 
@@ -105,8 +99,8 @@ const postTweet = async (userId, tweetText) => {
 const twitterAuth = passport.authenticate('twitter');
 
 const twitterCallback = passport.authenticate('twitter', {
-  successRedirect: '/index',
-  failureRedirect: '/index',
+  successRedirect: '/dashboard',
+  failureRedirect: '/dashboard',
 });
 
 module.exports = {

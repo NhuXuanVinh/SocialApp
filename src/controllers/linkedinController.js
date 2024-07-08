@@ -73,8 +73,8 @@ const handleLinkedInCallback = async (req, res) => {
 
         await linkedinModel.upsertUserWithLinkedin(userId, linkedinId, username, email, accessToken)
 
-        req.session.accessToken = accessToken;
-        req.session.linkedinUrn = `urn:li:person:${linkedinId}`;
+        // req.session.accessToken = accessToken;
+        // req.session.linkedinUrn = `urn:li:person:${linkedinId}`;
 
         res.redirect('/dashboard');
     } catch (error) {
@@ -123,6 +123,7 @@ const postToLinkedIn = async (req, res) => {
         });
 
         res.render('form', { message: 'Post successful!' });
+        
     } catch (error) {
         console.error('Error posting to LinkedIn:', error.response ? error.response.data : error.message);
         res.status(500).send('Error posting to LinkedIn');

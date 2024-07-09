@@ -52,7 +52,7 @@
                                 <div class="account-item">
                                     <img src="/images/linkedin.png" alt="LinkedIn">
                                     <span>Connected as <%= account.username %></span>
-                                    <a href="/post-to-linkedin/<%= account.linkedin_id %>" class="reconnect">Post</a>
+                                    <a href="/post-form/linkedin/<%= account.linkedin_id %>?username=<%= account.username %>" class="reconnect">Post</a>
                                 </div>
                             <% }) %>
                         <% } %>
@@ -65,7 +65,20 @@
                                 <div class="account-item">
                                     <img src="/images/twitter.png" alt="Twitter">
                                     <span>Connected as <%= account.username %></span>
-                                    <a href="/tweet/<%= account.twitter_id %>" class="reconnect">Post</a>
+                                    <a href="/post-form/twitter/<%= account.twitter_id %>?username=<%= account.username %>" class="reconnect">Post</a>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                </li>
+                <li>
+                    <div class="account youtube">
+                        <% if (youtubeAccounts && youtubeAccounts.length > 0) { %>
+                            <% youtubeAccounts.forEach(account => { %>
+                                <div class="account-item">
+                                    <img src="/images/youtube.png" alt="YouTube">
+                                    <span>Connected as <%= account.username %></span>
+                                    <a href="/youtube_upload/<%= account.youtube_id %>" class="reconnect">Post</a>
                                 </div>
                             <% }) %>
                         <% } %>
@@ -92,6 +105,15 @@
                             <img src="/images/twitter.png" alt="Twitter">
                             <span>Connect to Twitter</span>
                             <a href="/auth/twitter" class="connect">Connect</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="account twitter">
+                        <div class="account-item">
+                            <img src="/images/youtube.png" alt="Youtube">
+                            <span>Connect to Youtube</span>
+                            <a href="/auth/google" class="connect">Connect</a>
                         </div>
                     </div>
                 </li>

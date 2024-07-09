@@ -29,25 +29,25 @@ const findLinkedinAccountByLinkedinId = async (linkedin_id) => {
       return result.rows[0];
   };
   
-  const createScheduledPost = async (linkedin_id, content, scheduledTime, status) => {
+  const createLinkedinPost = async (linkedin_id, content, scheduledTime,  postLink, status) => {
     const result = await pool.query(
-        'INSERT INTO linkedin_posts (user_id, content, scheduled_time, status) VALUES ($1, $2, $3) RETURNING *',
-        [linkedin_id, content, scheduledTime, status]
+        'INSERT INTO linkedin_posts (linkedin_id, content, scheduled_time, status, post_link) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [linkedin_id, content, scheduledTime, status, postLink]
     );
-    return result.rows[0];
+    return result.rows[0].post_id;
 };
 
-const getPendingScheduledPosts = async () => {
-    const result = await pool.query(
-        'SELECT * FROM linkedin_posts WHERE scheduled_time > NOW() ORDER BY scheduled_time ASC'
-    );
-    return result.rows;
+const updatePostStatusById = async (postId, status, postLink) => {
+  const result = await pool.query(
+      'UPDATE linkedin_posts SET status = $1, post_link = $2 WHERE post_id = $3 RETURNING *',
+      [status, postLink, postId]
+  );
+  return result.rows[0];
 };
-
   module.exports = {
     findLinkedinAccountByLinkedinId,
     upsertUserWithLinkedin,
     findLinkedinAccountsByUserId,
-    createScheduledPost,
-    getPendingScheduledPosts
+    createLinkedinPost,
+    updatePostStatusById
   };

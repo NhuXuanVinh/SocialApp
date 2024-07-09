@@ -4,7 +4,6 @@ const authController = require('../controllers/authController');
 
 // Route for displaying the login page
 router.get('/login', (req, res) => {
-    console.log("test");
     res.render('login');  // Assuming 'login.ejs' is your login template
 });
 

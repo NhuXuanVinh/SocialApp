@@ -83,19 +83,23 @@ const handleLinkedInCallback = async (req, res) => {
     }
 };
 
-const postToLinkedIn = async (req, res) => {
+const postToLinkedIn = async (req, res = null) => {
     const { content } = req.body;
+    const { linkedinId } = req.params;
+
     try {
-        const linkedinAccount = await linkedinModel.findLinkedinAccountByUserId(req.user.userid);
+        const linkedinAccount = await linkedinModel.findLinkedinAccountByLinkedinId(linkedinId);
         if (!linkedinAccount) {
-            return res.status(400).send('LinkedIn account not found for the user.');
+            if (res) return res.status(400).send('LinkedIn account not found for the user.');
+            throw new Error('LinkedIn account not found for the user.');
         }
 
         const accessToken = linkedinAccount.token;
         const linkedinUrn = `urn:li:person:${linkedinAccount.linkedin_id}`;
 
         if (!accessToken || !linkedinUrn) {
-            return res.status(400).send('Session expired or invalid. Please re-authenticate.');
+            if (res) return res.status(400).send('Session expired or invalid. Please re-authenticate.');
+            throw new Error('Session expired or invalid. Please re-authenticate.');
         }
 
         const postBody = {
@@ -114,7 +118,7 @@ const postToLinkedIn = async (req, res) => {
             }
         };
 
-        await axios.post(LINKEDIN_POST_URL, postBody, {
+        const postResponse = await axios.post(LINKEDIN_POST_URL, postBody, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -122,12 +126,19 @@ const postToLinkedIn = async (req, res) => {
             }
         });
 
-        res.render('form', { message: 'Post successful!' });
-        
+        console.log('LinkedIn post response:', postResponse.data); // Log the entire response
+        return postResponse.data; // Return the response for internal use (e.g., scheduling)
+
     } catch (error) {
         console.error('Error posting to LinkedIn:', error.response ? error.response.data : error.message);
-        res.status(500).send('Error posting to LinkedIn');
+        throw error; // For scheduled jobs, throw the error to be caught by the job handler
     }
+};
+
+module.exports = {
+    redirectToLinkedIn,
+    handleLinkedInCallback,
+    postToLinkedIn
 };
 
 module.exports = {

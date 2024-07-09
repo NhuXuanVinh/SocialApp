@@ -81,17 +81,15 @@ const postTweet = async (req, res) => {
     const { data: tweet } = await client.v2.tweet(tweetText);
     console.log('Tweet posted successfully:', tweet);
 
-    // Save post to db
-    const postLink = `https://twitter.com/${twitterAccount.username}/status/${tweet.id}`;
-    await twitterModel.createTwitterPost(twitterId, tweetText, null, postLink, "posted");
+    // // Save post to db
+    // const postLink = `https://twitter.com/${twitterAccount.username}/status/${tweet.id}`;
+    // await twitterModel.createTwitterPost(twitterId, tweetText, null, postLink, "posted");
 
     // Redirect to dashboard
-    req.flash('success', 'Tweet posted successfully!');
-    res.redirect('/dashboard')
+    return tweet;
   } catch (error) {
     console.error('Error posting tweet:', error);
-    req.flash('error', 'There was an error posting the tweet.');
-    res.redirect('/dashboard');
+    throw error;
   }
 };
 

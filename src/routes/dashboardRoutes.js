@@ -3,6 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const linkedinModel = require('../models/linkedinModel');
 const twitterModel = require('../models/twitterModel');
+const youtubeModel = require('../models/youtubeModel');
 // const youtubeModel = require('../models/youtubeModel');
 
 router.get('/dashboard', authController.ensureAuthenticated, async (req, res) => {
@@ -10,13 +11,12 @@ router.get('/dashboard', authController.ensureAuthenticated, async (req, res) =>
         const userId = req.user.userid;
         const linkedinAccounts = await linkedinModel.findLinkedinAccountsByUserId(userId);
         const twitterAccounts = await twitterModel.findTwitterAccountsByUserId(userId);
-        // const youtubeAccounts = await youtubeModel.findYoutubeAccountsByUserId(userId);
-        // const youtubeAccounts = []
+        const youtubeAccounts = await youtubeModel.findYouTubeAccountsByUserId(userId);
 
         res.render('dashboard', {
             linkedinAccounts: linkedinAccounts || [],
             twitterAccounts: twitterAccounts || [],
-            // youtubeAccounts: youtubeAccounts,
+            youtubeAccounts: youtubeAccounts || [],
             messages: req.flash(),
         });
     } catch (error) {

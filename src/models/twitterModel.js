@@ -31,14 +31,25 @@ const findTwitterAccountByTwitterId = async (twitterId) => {
   
   const createTwitterPost = async(twitterId, tweetText, scheduleTime, postLink, status) =>{
     const result = await pool.query(
-      'INSERT INTO twitter_posts (twitter_id, content, scheduled_time, post_link) VALUES ($1, $2, $3, $4)',
-      [twitterId, tweetText, scheduleTime, postLink]
+      'INSERT INTO twitter_posts (twitter_id, content, scheduled_time, post_link, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [twitterId, tweetText, scheduleTime, postLink, status],
+    );
+      console.log(result.rows[0]);
+      return result.rows[0].post_id;
+  }
+
+  const updatePostStatusById = async (postId, status, postLink) => {
+    const result = await pool.query(
+        'UPDATE twitter_posts SET status = $1, post_link = $2 WHERE post_id = $3 RETURNING *',
+        [status, postLink, postId]
     );
     return result.rows[0];
-  }
+};
+
   module.exports = {
     findTwitterAccountByTwitterId,
     upsertUserWithTwitter,
     findTwitterAccountsByUserId,
     createTwitterPost,
+    updatePostStatusById
   };
